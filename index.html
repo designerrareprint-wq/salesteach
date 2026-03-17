@@ -1009,6 +1009,8 @@ var ARENA=[
 // ================================================================
 // APP STATE
 // ================================================================
+var LVXP=[0,500,1200,2200,3500,5000];
+var LVNAMES=['Rookie Seller','Rising Star','Skilled Closer','Sales Pro','Elite Performer','Champion'];
 var APP={user:null,xp:0,level:1,cm:[],ss:0,curMod:null,curSc:0,am:0,as_:0,al:1};
 var SD={};
 var step=0;
@@ -1103,16 +1105,6 @@ function nxt(dir){
 function doSignup(){
   var agr=document.getElementById('agr');
   if(!agr.checked){showErr('sue','Please accept the Terms of Service to continue.');return}
-  // Guard: ensure Step 1 data was collected (in case user reached Step 3 via back/forward)
-  if(!SD.name||!SD.email||!SD.pass){
-    showErr('sue','Please complete Step 1 (Account Info) first.');
-    step=0;renderSteps();return;
-  }
-  // Guard: ensure Step 2 data was collected
-  if(!SD.biz||!SD.role||!SD.industry){
-    showErr('sue','Please complete Step 2 (Business Info) first.');
-    step=1;renderSteps();return;
-  }
   APP.user={name:SD.name,email:SD.email,pass:SD.pass,biz:SD.biz,role:SD.role,industry:SD.industry,lang:SD.lang||'en',exp:document.getElementById('sex').value,channel:document.getElementById('sch').value,team:document.getElementById('su-team').value};
   APP.xp=0;APP.level=1;APP.cm=[];APP.ss=0;
   save();loadDash();show('pd');

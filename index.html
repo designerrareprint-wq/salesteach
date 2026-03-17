@@ -1103,6 +1103,16 @@ function nxt(dir){
 function doSignup(){
   var agr=document.getElementById('agr');
   if(!agr.checked){showErr('sue','Please accept the Terms of Service to continue.');return}
+  // Guard: ensure Step 1 data was collected (in case user reached Step 3 via back/forward)
+  if(!SD.name||!SD.email||!SD.pass){
+    showErr('sue','Please complete Step 1 (Account Info) first.');
+    step=0;renderSteps();return;
+  }
+  // Guard: ensure Step 2 data was collected
+  if(!SD.biz||!SD.role||!SD.industry){
+    showErr('sue','Please complete Step 2 (Business Info) first.');
+    step=1;renderSteps();return;
+  }
   APP.user={name:SD.name,email:SD.email,pass:SD.pass,biz:SD.biz,role:SD.role,industry:SD.industry,lang:SD.lang||'en',exp:document.getElementById('sex').value,channel:document.getElementById('sch').value,team:document.getElementById('su-team').value};
   APP.xp=0;APP.level=1;APP.cm=[];APP.ss=0;
   save();loadDash();show('pd');
@@ -1172,7 +1182,7 @@ function loadDash(){
   var h=new Date().getHours();
   var gr=h<12?'Good morning,':h<17?'Good afternoon,':'Good evening,';
   document.getElementById('dg').textContent=gr;
-  document.getElementById('dn').textContent=u.name.split(' ')[0]+'! 👋';
+  document.getElementById('dn').textContent=((u.name||'User').split(' ')[0])+'! 👋';
   var ind=IND[u.industry]?IND[u.industry].l:u.industry||'Your Business';
   document.getElementById('dc').innerHTML='<span>🏢</span><span>'+u.biz+' • '+ind+'</span>';
   var lv=APP.level,xnw=APP.xp-LVXP[lv-1],xmx=LVXP[lv]-LVXP[lv-1];
